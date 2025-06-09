@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  grpc-server:
+    build: .
+    ports:
+      - "50051:50051"
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+    command: python -m sum_service.grpc.server
+    networks:
+      - sum-network
+
+  websocket-server:
+    build: .
+    ports:
+      - "8765:8765"
+    depends_on:
+      grpc-server:
+        condition: service_healthy
+    command: python -m sum_service.websocket.server
+    networks:
+      - sum-network
+
+networks:
+  sum-network:
+    driver: bridge 

@@ -1,0 +1,73 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+.env
+.venv/
+env/
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# Generated gRPC files
+*_pb2.py
+*_pb2_grpc.py
+
+# Logs
+*.log
+logs/
+log/
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+.mypy_cache/
+.ruff_cache/
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Local development
+*.local
+.env.local
+.env.*.local
+
+# Keep these files
+!requirements.txt
+!setup.py
+!Dockerfile
+!docker-compose.yml
+!README.md 

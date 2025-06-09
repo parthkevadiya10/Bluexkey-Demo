@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sum;
+
+// The sum service definition
+service SumService {
+  // Calculate sum of two numbers
+  rpc CalculateSum (SumRequest) returns (SumResponse) {}
+}
+
+// The request message containing a single number
+message SumRequest {
+  int32 number = 1;  // Single number to be added
+}
+
+// The response message containing the sum
+message SumResponse {
+  int32 result = 1;  // Result of the operation
+} 
