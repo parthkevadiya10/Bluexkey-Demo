@@ -14,10 +14,13 @@ services:
     networks:
       - sum-network
 
-  websocket-server:
+  websocket-proxy:
     build: .
     ports:
       - "8765:8765"
+    environment:
+      - GRPC_HOST=grpc-server
+      - GRPC_PORT=50051
     depends_on:
       grpc-server:
         condition: service_healthy

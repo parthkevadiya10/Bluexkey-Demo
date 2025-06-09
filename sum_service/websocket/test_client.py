@@ -1,30 +1,36 @@
 import asyncio
 import websockets
 import json
+import logging
+import os
 
-async def test_websocket():
-    uri = "ws://websocket-server:8765"
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+async def test_websocket_client():
+    # Get configuration from environment variables
+    ws_host = os.getenv('WS_HOST', 'localhost')
+    ws_port = os.getenv('WS_PORT', '8765')
+    uri = f"ws://{ws_host}:{ws_port}"
+    
+    logger.info(f"Connecting to WebSocket server at {uri}")
+    
     async with websockets.connect(uri) as websocket:
-        # Test sending first number
-        first_number = {"number": 5}
-        print(f"Sending first number: {first_number}")
-        await websocket.send(json.dumps(first_number))
-        response = await websocket.recv()
-        print(f"Received response: {response}")
-
-        # Test sending second number
-        second_number = {"number": 3}
-        print(f"\nSending second number: {second_number}")
-        await websocket.send(json.dumps(second_number))
-        response = await websocket.recv()
-        print(f"Received response: {response}")
-
-        # Test invalid request
-        invalid_data = {"invalid": "data"}
-        print(f"\nSending invalid request: {invalid_data}")
-        await websocket.send(json.dumps(invalid_data))
-        response = await websocket.recv()
-        print(f"Received response: {response}")
+        # Test sending numbers
+        test_numbers = [1, 2, 3, 4, 5]
+        
+        for number in test_numbers:
+            # Send number
+            message = json.dumps({"number": number})
+            logger.info(f"Sending: {message}")
+            await websocket.send(message)
+            
+            # Get response
+            response = await websocket.recv()
+            logger.info(f"Received: {response}")
+            
+            # Small delay between requests
+            await asyncio.sleep(1)
 
 if __name__ == "__main__":
-    asyncio.run(test_websocket()) 
+    asyncio.run(test_websocket_client()) 

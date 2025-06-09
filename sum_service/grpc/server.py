@@ -5,32 +5,20 @@ import sum_pb2_grpc
 from grpc_health.v1 import health_pb2
 from grpc_health.v1 import health_pb2_grpc
 from grpc_reflection.v1alpha import reflection
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class SumServicer(sum_pb2_grpc.SumServiceServicer):
     def __init__(self):
-        self.number_buffers = {}  # Store numbers for each client
+        self.running_sum = 0
 
     def CalculateSum(self, request, context):
-        # Get client ID from context
-        client_id = context.peer()
-        
-        # Initialize buffer for new client
-        if client_id not in self.number_buffers:
-            self.number_buffers[client_id] = []
-        
-        # Add number to buffer
-        self.number_buffers[client_id].append(request.number)
-        
-        # If we have two numbers, calculate sum
-        if len(self.number_buffers[client_id]) == 2:
-            a, b = self.number_buffers[client_id]
-            result = a + b
-            # Clear buffer after calculation
-            self.number_buffers[client_id] = []
-            return sum_pb2.SumResponse(result=result)
-        else:
-            # Return 0 if waiting for second number
-            return sum_pb2.SumResponse(result=0)
+        # Add the new number to running sum
+        self.running_sum += request.number
+        logger.info(f"Received number {request.number}, new sum: {self.running_sum}")
+        return sum_pb2.SumResponse(result=self.running_sum)
 
 class HealthServicer(health_pb2_grpc.HealthServicer):
     def __init__(self):
@@ -61,7 +49,7 @@ def serve():
     port = 50051
     server.add_insecure_port(f'[::]:{port}')
     server.start()
-    print(f"Server started on port {port}")
+    logger.info(f"gRPC server started on port {port}")
     server.wait_for_termination()
 
 if __name__ == '__main__':
