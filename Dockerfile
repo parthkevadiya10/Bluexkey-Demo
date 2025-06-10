@@ -22,15 +22,18 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
 # Copy the rest of the application
 COPY . .
 
-# Clean up any existing generated files and regenerate gRPC code
-RUN rm -f sum_pb2.py sum_pb2_grpc.py && \
-    python -m grpc_tools.protoc -I./sum_service/grpc/proto --python_out=. --grpc_python_out=. ./sum_service/grpc/proto/sum.proto
+# Generate gRPC code
+RUN python -m grpc_tools.protoc \
+    -I./sum_service/grpc/proto \
+    --python_out=./sum_service/grpc/proto \
+    --grpc_python_out=./sum_service/grpc/proto \
+    ./sum_service/grpc/proto/sum.proto
 
 # Install the package in development mode
 RUN pip install -e .
 
-# Set Python path
-ENV PYTHONPATH=/app
+# Set Python path to include the proto directory
+ENV PYTHONPATH=/app:/app/sum_service/grpc/proto
 
 # Run as non-root user
 RUN useradd -m appuser && chown -R appuser:appuser /app

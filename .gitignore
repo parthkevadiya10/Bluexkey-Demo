@@ -22,7 +22,7 @@ wheels/
 
 # Virtual Environment
 .env
-.venv/
+.venv
 env/
 venv/
 ENV/
@@ -32,42 +32,30 @@ ENV/
 .vscode/
 *.swp
 *.swo
-*.sublime-workspace
-*.sublime-project
 
-# Generated gRPC files
-*_pb2.py
-*_pb2_grpc.py
-
-# Logs
-*.log
-logs/
-log/
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
 
 # Docker
 .docker/
-docker-compose.override.yml
 
-# Testing
-.coverage
-htmlcov/
-.pytest_cache/
-.tox/
-.mypy_cache/
-.ruff_cache/
-
-# OS specific
-.DS_Store
-Thumbs.db
+# Logs
+*.log
 
 # Local development
-*.local
 .env.local
-.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # Keep these files
 !requirements.txt
 !setup.py
 !Dockerfile
 !docker-compose.yml
-!README.md 
+!envoy.yaml
+!generate_proto.py 

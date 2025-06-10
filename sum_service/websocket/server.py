@@ -45,7 +45,7 @@ class WebSocketProxy:
                     
                     # Send gRPC response back to WebSocket client
                     await websocket.send(json.dumps({
-                        'result': response.result,
+                        'sum': response.result,
                     }))
                     logger.info(f"Sent response to client {client_id}: {response.result}")
 
